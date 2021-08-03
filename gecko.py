@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Any, Callable
+from typing import Callable
 
 
 def disable(func: Callable) -> Callable:
