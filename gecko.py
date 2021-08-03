@@ -3,7 +3,7 @@ from typing import Any, Callable
 
 
 def disable(func: Callable) -> Callable:
-    """This decorator simply keeps whatever function it decorates from executing"""
+    """This decorator prevents the function it decorates from executing"""
 
     @wraps(func)
     def wrapper(*args: list[Any], **kwargs):
