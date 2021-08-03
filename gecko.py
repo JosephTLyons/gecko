@@ -1,24 +1,12 @@
 from functools import wraps
+from typing import Any, Callable
 
 
-def disable(func):
+def disable(func: Callable) -> Callable:
+    """This decorator simply keeps whatever function it decorates from executing"""
 
     @wraps(func)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: list[Any], **kwargs):
         print(f"{func.__name__} is disabled")
 
     return wrapper
-
-
-@disable
-def get_greeting_string(name: str) -> str:
-    """Gets a greeting string"""
-    return f"Hello, {name}"
-
-
-def main() -> None:
-    print(get_greeting_string("Joseph"))
-
-
-if __name__ == "__main__":
-    main()
