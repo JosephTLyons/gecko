@@ -6,4 +6,4 @@ def test_disable_decorator() -> None:
     def hello_world() -> str:
         return "Hello World!"
 
-    assert(hello_world() == None)
+    assert(hello_world() is None)
