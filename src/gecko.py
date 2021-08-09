@@ -32,8 +32,6 @@ def retry(exceptions: tuple[type[BaseException], ...], number_of_retries: int, d
                         time.sleep(duration_between_retries_in_seconds)
                     else:
                         raise exception
-                except Exception as exception:
-                    raise exception
 
         return wrapper
 
