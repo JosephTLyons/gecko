@@ -32,8 +32,6 @@ def __test_retry_decorator_base(number_of_exceptions_raised, number_of_retries, 
         if exceptions:
             raise exceptions.pop()
 
-        return None
-
     try:
         decorated_function()
         assert(not should_catch_exception)
