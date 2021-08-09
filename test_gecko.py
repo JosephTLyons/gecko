@@ -1,4 +1,4 @@
-from gecko import disable, retry
+from src.gecko import disable, retry
 
 
 def test_disable_decorator() -> None:
