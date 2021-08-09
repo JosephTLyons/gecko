@@ -21,14 +21,12 @@ def retry(exceptions: tuple[type[BaseException], ...], number_of_retries: int, d
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(*args, **kwargs):  # TODO: type annotations for this function
-            retry_count = 0
-
-            while True:
+            # We must loop an additional time to ensure that the `else` block can be executed
+            for retry_count in range(number_of_retries + 1):
                 try:
                     return func(*args, **kwargs)
                 except exceptions as exception:
                     if retry_count < number_of_retries:
-                        retry_count += 1
                         time.sleep(duration_between_retries_in_seconds)
                     else:
                         raise exception
