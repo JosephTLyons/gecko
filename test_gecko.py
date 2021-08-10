@@ -30,7 +30,7 @@ def __test_retry_decorator_base(number_of_exceptions_raised: int, number_of_retr
     @retry((FileNotFoundError,), number_of_retries, 0.01)
     def decorated_function() -> None:
         if exceptions:
-            raise exceptions.pop()
+            raise exceptions.pop(0)
 
     try:
         decorated_function()
