@@ -1,3 +1,6 @@
 __pycache__
+.DS_STORE
+.idea
+.mypy_cache
 .vscode
 virtual_environment
