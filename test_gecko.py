@@ -23,9 +23,9 @@ def test_retry_decorator_fail() -> None:
     __test_retry_decorator_base(number_of_exceptions_raised=4, number_of_retries=3, should_catch_exception=True)
 
 
-def __test_retry_decorator_base(number_of_exceptions_raised, number_of_retries, should_catch_exception) -> None:
+def __test_retry_decorator_base(number_of_exceptions_raised: int, number_of_retries: int, should_catch_exception: bool) -> None:
     # Used to simimulate a function raising multiple exceptions
-    exceptions = [FileNotFoundError] * number_of_exceptions_raised
+    exceptions: list[type[BaseException]] = [FileNotFoundError] * number_of_exceptions_raised
 
     @retry((FileNotFoundError,), number_of_retries, 0.01)
     def decorated_function() -> None:
