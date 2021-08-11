@@ -14,7 +14,8 @@ def disable(func: Callable) -> Callable:
 
 
 def retry(exceptions: tuple[type[BaseException], ...], number_of_retries: int, duration_between_retries_in_seconds: float) -> Callable:
-    """This decorator re-calls the function it decorates when the function raises any `Exception` in the `exceptions` tuple.
+    """
+    This decorator re-calls the function it decorates when the function raises any `Exception` in the `exceptions` tuple.
     It should be noted that the function is called once before any retries are attempted.  Because of this,
     the number of times the function will be called will be `number_of_retries` + 1.
     """
