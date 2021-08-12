@@ -13,17 +13,17 @@ def test_retry_decorator_pass() -> None:
     # We want the `decorated_function` to raise 3 exceptions.  The number of times the function will be called is `number_of_retries` + 1
     # Thus, we have 3 raises and 4 calls to the function, so the function will not raise on the final call and the test should
     # pass only if the test is ran without catching any exceptions from the `decorated_function`.
-    __test_retry_decorator_base(number_of_exceptions_raised=3, number_of_retries=3, should_catch_exception=False)
+    __test_retry_decorator_base(number_of_exceptions_raised=3, number_of_retries=3, try_should_succeed=True)
 
 
 def test_retry_decorator_fail() -> None:
     # We want the `decorated_function` to raise 4 exceptions.  The number of times the function will be called is `number_of_retries` + 1
     # Thus, we have 4 raises and 4 calls to the function, so the function will raise on the final call and the test should
     # pass only if the test is catches an exception raised by the `decorated_function`.
-    __test_retry_decorator_base(number_of_exceptions_raised=4, number_of_retries=3, should_catch_exception=True)
+    __test_retry_decorator_base(number_of_exceptions_raised=4, number_of_retries=3, try_should_succeed=False)
 
 
-def __test_retry_decorator_base(number_of_exceptions_raised: int, number_of_retries: int, should_catch_exception: bool) -> None:
+def __test_retry_decorator_base(number_of_exceptions_raised: int, number_of_retries: int, try_should_succeed: bool) -> None:
     # Used to simimulate a function raising multiple exceptions
     exceptions: list[type[BaseException]] = [FileNotFoundError] * number_of_exceptions_raised
 
@@ -34,6 +34,6 @@ def __test_retry_decorator_base(number_of_exceptions_raised: int, number_of_retr
 
     try:
         decorated_function()
-        assert(not should_catch_exception)
+        assert(try_should_succeed)
     except FileNotFoundError:
-        assert(should_catch_exception)
+        assert(not try_should_succeed)
