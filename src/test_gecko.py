@@ -19,7 +19,7 @@ def test_retry_decorator_pass() -> None:
     exceptions_to_raise: list[type[BaseException]] = [FileExistsError] * 3
     exceptions_to_catch: tuple[type[BaseException], ...] = tuple(exceptions_to_raise)
 
-    __test_retry_decorator_base(
+    __test_retry_decorator(
         exceptions_to_raise=exceptions_to_raise,
         exceptions_to_catch=exceptions_to_catch,
         number_of_retries=3,
@@ -35,7 +35,7 @@ def test_retry_decorator_fail() -> None:
     exceptions_to_raise: list[type[BaseException]] = [FileExistsError] * 4
     exceptions_to_catch: tuple[type[BaseException], ...] = tuple(exceptions_to_raise)
 
-    __test_retry_decorator_base(
+    __test_retry_decorator(
         exceptions_to_raise=exceptions_to_raise,
         exceptions_to_catch=exceptions_to_catch,
         number_of_retries=3,
@@ -43,7 +43,7 @@ def test_retry_decorator_fail() -> None:
     )
 
 
-def __test_retry_decorator_base(
+def __test_retry_decorator(
     # Defined as a list so we can create repeated lis
     exceptions_to_raise: list[type[BaseException]],
     exceptions_to_catch: tuple[type[BaseException], ...],
