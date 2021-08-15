@@ -20,7 +20,6 @@ class RetryDecoratorTestResultType(Enum):
 def test_retry_decorator_pass() -> None:
     # This test covers the case of the decorated function raising less exceptions than the retry decorator is defined to catch.
     # It should be noted that the decorated function is raising exceptions that the decorator is definied to retry on.
-    # This test should pass.
 
     exceptions_to_raise: list[type[BaseException]] = [FileExistsError] * 3
     exceptions_to_catch: tuple[type[BaseException], ...] = tuple(exceptions_to_raise)
@@ -37,7 +36,6 @@ def test_retry_decorator_pass() -> None:
 def test_retry_decorator_too_many_exceptions_fail() -> None:
     # This test covers the case of the decorated function raising more exceptions than the retry decorator is defined to catch.
     # It should be noted that the decorated function is raising exceptions that the decorator is definied to retry on
-    # This test should fail.
 
     exceptions_to_raise: list[type[BaseException]] = [FileExistsError] * 4
     exceptions_to_catch: tuple[type[BaseException], ...] = tuple(exceptions_to_raise)
@@ -53,7 +51,6 @@ def test_retry_decorator_too_many_exceptions_fail() -> None:
 
 def test_retry_decorator_different_exception_fail() -> None:
     # This test covers the case of an exception being raised by the decorated function that is not specified in the `retry` decorator.
-    # This test should fail.
 
     exceptions_to_raise: list[type[BaseException]] = [FileExistsError]
     exceptions_to_catch: tuple[type[BaseException], ...] = (FileNotFoundError,)
