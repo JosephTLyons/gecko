@@ -14,7 +14,7 @@ def test_disable_decorator() -> None:
 class RetryDecoratorTestResultType(Enum):
     SUCCESS = auto()
     SPECIFIED_EXCEPTION = auto()
-    UNKNOWN_EXCEPTION = auto()
+    UNSPECIFIED_EXCEPTION = auto()
 
 
 def test_retry_decorator_pass() -> None:
@@ -63,7 +63,7 @@ def test_retry_decorator_different_exception_fail() -> None:
         number_of_retries=1,
     )
 
-    assert(retry_decorator_test_result_type == RetryDecoratorTestResultType.UNKNOWN_EXCEPTION)
+    assert(retry_decorator_test_result_type == RetryDecoratorTestResultType.UNSPECIFIED_EXCEPTION)
 
 
 def __test_retry_decorator(
@@ -90,4 +90,4 @@ def __test_retry_decorator(
     except exceptions_to_catch:
         return RetryDecoratorTestResultType.SPECIFIED_EXCEPTION
     except Exception:
-        return RetryDecoratorTestResultType.UNKNOWN_EXCEPTION
+        return RetryDecoratorTestResultType.UNSPECIFIED_EXCEPTION
