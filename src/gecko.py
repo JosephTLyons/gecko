@@ -1,27 +1,31 @@
 import time
 
 from functools import wraps
-from typing import Callable
+from typing import Any, Callable, TypeVar, cast
 
 
-def disable(func: Callable) -> Callable:
+# https://mypy.readthedocs.io/en/stable/generics.html#declaring-decorators
+Func = TypeVar("Func", bound=Callable[..., Any])
+
+
+def disable(func: Func) -> Func:
     """This decorator prevents the function it decorates from executing"""
     @wraps(func)
-    def wrapper(*args, **kwargs):  # TODO: type annotations for this function
+    def wrapper(*args, **kwargs):  # type: ignore
         print(f"{func.__name__} is disabled")
 
-    return wrapper
+    return cast(Func, wrapper)
 
 
-def retry(*exceptions: type[BaseException], number_of_retries: int = 3, duration_between_retries_in_seconds: float = 1) -> Callable:
+def retry(*exceptions: type[BaseException], number_of_retries: int = 3, duration_between_retries_in_seconds: float = 1) -> Callable[[Func], Func]:
     """
     This decorator re-calls the function it decorates when the function raises any `Exception` in the `exceptions` tuple.
     It should be noted that the function is called once before any retries are attempted.  Because of this,
     the number of times the function will be called will be `number_of_retries` + 1.
     """
-    def decorator(func: Callable) -> Callable:
+    def decorator(func: Func) -> Func:
         @wraps(func)
-        def wrapper(*args, **kwargs):  # TODO: type annotations for this function
+        def wrapper(*args, **kwargs):  # type: ignore
             # We must loop an additional time to ensure that the `else` block can be executed
             for retry_count in range(number_of_retries + 1):
                 try:
@@ -32,6 +36,6 @@ def retry(*exceptions: type[BaseException], number_of_retries: int = 3, duration
                     else:
                         raise exception
 
-        return wrapper
+        return cast(Func, wrapper)
 
     return decorator
