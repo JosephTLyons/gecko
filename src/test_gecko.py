@@ -44,7 +44,6 @@ def test_retry_decorator_fail() -> None:
 
 
 def __test_retry_decorator(
-    # Defined as a list so we can create repeated lis
     exceptions_to_raise: list[type[BaseException]],
     exceptions_to_catch: tuple[type[BaseException], ...],
     number_of_retries: int,
