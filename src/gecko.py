@@ -8,16 +8,25 @@ from typing import Any, Callable, TypeVar, cast
 Func = TypeVar("Func", bound=Callable[..., Any])
 
 
-def disable(func: Func) -> Func:
-    """This decorator prevents the function it decorates from executing"""
-    @wraps(func)
-    def wrapper(*args, **kwargs):  # type: ignore
-        print(f"{func.__name__} is disabled")
+def disable(should_print_details: bool = False) -> Callable[[Func], Func]:
+    def decorator(func: Func) -> Func:
+        """This decorator prevents the function it decorates from executing"""
+        @wraps(func)
+        def wrapper(*args, **kwargs):  # type: ignore
+            if should_print_details:
+                print(f"{func.__name__} is disabled")
 
-    return cast(Func, wrapper)
+        return cast(Func, wrapper)
+
+    return decorator
 
 
-def retry(*exceptions: type[BaseException], number_of_retries: int = 3, duration_between_retries_in_seconds: float = 1) -> Callable[[Func], Func]:
+def retry(
+    *exceptions: type[BaseException],
+    number_of_retries: int = 3,
+    duration_between_retries_in_seconds: float = 1,
+    should_print_details: bool = False
+) -> Callable[[Func], Func]:
     """
     This decorator re-calls the function it decorates when the function raises any `Exception` in the `exceptions` tuple.
     It should be noted that the function is called once before any retries are attempted.  Because of this,
@@ -33,6 +42,9 @@ def retry(*exceptions: type[BaseException], number_of_retries: int = 3, duration
                 except exceptions as exception:
                     if retry_count < number_of_retries:
                         time.sleep(duration_between_retries_in_seconds)
+
+                        if should_print_details:
+                            print(f"{func.__name__}: retry {retry_count + 1}")
                     else:
                         raise exception
 

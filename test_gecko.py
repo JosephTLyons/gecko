@@ -2,7 +2,7 @@ from src.gecko import disable, retry
 
 
 def test_disable_decorator() -> None:
-    @disable
+    @disable()
     def decorated_function() -> str:
         return "Hello World!"
 
