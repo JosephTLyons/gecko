@@ -1,3 +1,5 @@
+from enum import Enum, auto
+
 from src.gecko import disable, retry
 
 
@@ -9,7 +11,10 @@ def test_disable_decorator() -> None:
     assert(decorated_function() is None)
 
 
-
+class RetryDecoratorTestResultType(Enum):
+    SUCCESS = auto()
+    SPECIFIED_EXCEPTION = auto()
+    UNKNOWN_EXCEPTION = auto()
 
 
 def test_retry_decorator_pass() -> None:
@@ -20,12 +25,13 @@ def test_retry_decorator_pass() -> None:
     exceptions_to_raise: list[type[BaseException]] = [FileExistsError] * 3
     exceptions_to_catch: tuple[type[BaseException], ...] = tuple(exceptions_to_raise)
 
-    __test_retry_decorator(
+    retry_decorator_test_result_type: RetryDecoratorTestResultType = __test_retry_decorator(
         exceptions_to_raise=exceptions_to_raise,
         exceptions_to_catch=exceptions_to_catch,
         number_of_retries=3,
-        try_should_succeed=True
     )
+
+    assert(retry_decorator_test_result_type == RetryDecoratorTestResultType.SUCCESS)
 
 
 def test_retry_decorator_too_many_exceptions_fail() -> None:
@@ -36,12 +42,13 @@ def test_retry_decorator_too_many_exceptions_fail() -> None:
     exceptions_to_raise: list[type[BaseException]] = [FileExistsError] * 4
     exceptions_to_catch: tuple[type[BaseException], ...] = tuple(exceptions_to_raise)
 
-    __test_retry_decorator(
+    retry_decorator_test_result_type: RetryDecoratorTestResultType = __test_retry_decorator(
         exceptions_to_raise=exceptions_to_raise,
         exceptions_to_catch=exceptions_to_catch,
         number_of_retries=3,
-        try_should_succeed=False
     )
+
+    assert(retry_decorator_test_result_type == RetryDecoratorTestResultType.SPECIFIED_EXCEPTION)
 
 
 def test_retry_decorator_different_exception_fail() -> None:
@@ -50,20 +57,20 @@ def test_retry_decorator_different_exception_fail() -> None:
     exceptions_to_raise: list[type[BaseException]] = [FileExistsError]
     exceptions_to_catch: tuple[type[BaseException], ...] = (FileNotFoundError,)
 
-    __test_retry_decorator(
+    retry_decorator_test_result_type: RetryDecoratorTestResultType = __test_retry_decorator(
         exceptions_to_raise=exceptions_to_raise,
         exceptions_to_catch=exceptions_to_catch,
         number_of_retries=1,
-        try_should_succeed=False
     )
+
+    assert(retry_decorator_test_result_type == RetryDecoratorTestResultType.UNKNOWN_EXCEPTION)
 
 
 def __test_retry_decorator(
     exceptions_to_raise: list[type[BaseException]],
     exceptions_to_catch: tuple[type[BaseException], ...],
     number_of_retries: int,
-    try_should_succeed: bool
-) -> None:
+) -> RetryDecoratorTestResultType:
     """
     This is a universal testing function for the `retry` decorator.  Other functions test specific cases by calling this function.
 
@@ -79,9 +86,8 @@ def __test_retry_decorator(
 
     try:
         decorated_function()
-        assert(try_should_succeed)
+        return RetryDecoratorTestResultType.SUCCESS
     except exceptions_to_catch:
-        assert(not try_should_succeed)
-    # Reaching this area means we hit an exception that wasn't specified in the `retry` decoratory
+        return RetryDecoratorTestResultType.SPECIFIED_EXCEPTION
     except Exception:
-        assert(not try_should_succeed)
+        return RetryDecoratorTestResultType.UNKNOWN_EXCEPTION
