@@ -27,7 +27,7 @@ def test_retry_decorator_pass() -> None:
     )
 
 
-def test_retry_decorator_fail() -> None:
+def test_retry_decorator_too_many_exceptions_fail() -> None:
     # We want the `decorated_function` to raise 4 exceptions.  The number of times the function will be called is `number_of_retries` + 1
     # Thus, we have 4 raises and 4 calls to the function, so the function will raise on the final call and the test should
     # pass only if the test is catches an exception raised by the `decorated_function`.
