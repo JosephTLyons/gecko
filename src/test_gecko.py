@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 from src.gecko import disable, retry
 
 
@@ -9,6 +7,9 @@ def test_disable_decorator() -> None:
         return "Hello World!"
 
     assert(decorated_function() is None)
+
+
+
 
 
 def test_retry_decorator_pass() -> None:
