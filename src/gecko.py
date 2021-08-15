@@ -41,10 +41,16 @@ def retry(*exceptions: type[BaseException], number_of_retries: int = 3, duration
     return decorator
 
 
-def validate(function):
-    @wraps(function)
-    def wrapper(*args, **kwargs):
-        type_hints = get_type_hints(function)
+def validate(func: Func) -> Func:
+    """
+    This decorator validates the input and output data types of the function it decorates.
+    It raises an `Exception` if the actual data types do not match what is provided in the hinting.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):  # type: ignore
+        type_hints = get_type_hints(func)
+
+        # Code this such that it omits things that aren't hinted
 
         expected_types = list(type_hints.values())
 
@@ -58,7 +64,7 @@ def validate(function):
             if not isinstance(actual_keyword_argument_value, expected_keyword_argument_type):
                 raise ValueError(f"{actual_keyword_argument_value} is not of type: {expected_keyword_argument_type}")
 
-        return_result = function(*args, **kwargs)
+        return_result = func(*args, **kwargs)
 
         expected_return_type = type_hints["return"]
 
@@ -67,4 +73,4 @@ def validate(function):
 
         return return_result
 
-    return wrapper
+    return cast(Func, wrapper)
