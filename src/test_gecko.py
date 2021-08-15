@@ -44,7 +44,7 @@ def test_retry_decorator_too_many_exceptions_fail() -> None:
 
 
 def test_retry_decorator_different_exception_fail() -> None:
-    # This test covers the case that an exception is raised by the decorated function that is not specified in the `retry` decorator.
+    # This test covers the case of an exception being raised by the decorated function that is not specified in the `retry` decorator.
 
     exceptions_to_raise: list[type[BaseException]] = [FileExistsError]
     exceptions_to_catch: tuple[type[BaseException], ...] = (FileNotFoundError,)
