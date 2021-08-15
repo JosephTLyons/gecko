@@ -24,7 +24,7 @@ def disable(should_print_details: bool = False) -> Callable[[Func], Func]:
 def retry(
     *exceptions: type[BaseException],
     number_of_retries: int = 3,
-    duration_between_retries_in_seconds: float = 1,
+    duration_between_retries_in_seconds: float = 1.0,
     should_print_details: bool = False
 ) -> Callable[[Func], Func]:
     """
