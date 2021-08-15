@@ -13,8 +13,8 @@ def test_disable_decorator() -> None:
 
 class RetryDecoratorResultType(Enum):
     SUCCESS = auto()
-    FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTION = auto()
-    FAILED_VIA_UNSPECIFIED_EXCEPTION = auto()
+    FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTIONS = auto()
+    FAILED_VIA_UNSPECIFIED_EXCEPTIONS = auto()
 
 
 def test_retry_decorator_pass() -> None:
@@ -46,7 +46,7 @@ def test_retry_decorator_too_many_exceptions_fail() -> None:
         number_of_retries=3,
     )
 
-    assert(retry_decorator_test_result_type == RetryDecoratorResultType.FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTION)
+    assert(retry_decorator_test_result_type == RetryDecoratorResultType.FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTIONS)
 
 
 def test_retry_decorator_different_exception_fail() -> None:
@@ -61,7 +61,7 @@ def test_retry_decorator_different_exception_fail() -> None:
         number_of_retries=1,
     )
 
-    assert(retry_decorator_test_result_type == RetryDecoratorResultType.FAILED_VIA_UNSPECIFIED_EXCEPTION)
+    assert(retry_decorator_test_result_type == RetryDecoratorResultType.FAILED_VIA_UNSPECIFIED_EXCEPTIONS)
 
 
 def __test_retry_decorator(
@@ -86,6 +86,6 @@ def __test_retry_decorator(
         decorated_function()
         return RetryDecoratorResultType.SUCCESS
     except exceptions_to_catch:
-        return RetryDecoratorResultType.FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTION
+        return RetryDecoratorResultType.FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTIONS
     except Exception:
-        return RetryDecoratorResultType.FAILED_VIA_UNSPECIFIED_EXCEPTION
+        return RetryDecoratorResultType.FAILED_VIA_UNSPECIFIED_EXCEPTIONS
