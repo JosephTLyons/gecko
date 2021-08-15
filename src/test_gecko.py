@@ -11,10 +11,10 @@ def test_disable_decorator() -> None:
     assert(decorated_function() is None)
 
 
-class RetryDecoratorTestResultType(Enum):
+class RetryDecoratorResultType(Enum):
     SUCCESS = auto()
-    SPECIFIED_EXCEPTION = auto()
-    UNSPECIFIED_EXCEPTION = auto()
+    FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTION = auto()
+    FAILED_VIA_UNSPECIFIED_EXCEPTION = auto()
 
 
 def test_retry_decorator_pass() -> None:
@@ -24,13 +24,13 @@ def test_retry_decorator_pass() -> None:
     exceptions_to_raise: list[type[BaseException]] = [FileExistsError] * 3
     exceptions_to_catch: tuple[type[BaseException], ...] = tuple(exceptions_to_raise)
 
-    retry_decorator_test_result_type: RetryDecoratorTestResultType = __test_retry_decorator(
+    retry_decorator_test_result_type: RetryDecoratorResultType = __test_retry_decorator(
         exceptions_to_raise=exceptions_to_raise,
         exceptions_to_catch=exceptions_to_catch,
         number_of_retries=3,
     )
 
-    assert(retry_decorator_test_result_type == RetryDecoratorTestResultType.SUCCESS)
+    assert(retry_decorator_test_result_type == RetryDecoratorResultType.SUCCESS)
 
 
 def test_retry_decorator_too_many_exceptions_fail() -> None:
@@ -40,13 +40,13 @@ def test_retry_decorator_too_many_exceptions_fail() -> None:
     exceptions_to_raise: list[type[BaseException]] = [FileExistsError] * 4
     exceptions_to_catch: tuple[type[BaseException], ...] = tuple(exceptions_to_raise)
 
-    retry_decorator_test_result_type: RetryDecoratorTestResultType = __test_retry_decorator(
+    retry_decorator_test_result_type: RetryDecoratorResultType = __test_retry_decorator(
         exceptions_to_raise=exceptions_to_raise,
         exceptions_to_catch=exceptions_to_catch,
         number_of_retries=3,
     )
 
-    assert(retry_decorator_test_result_type == RetryDecoratorTestResultType.SPECIFIED_EXCEPTION)
+    assert(retry_decorator_test_result_type == RetryDecoratorResultType.FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTION)
 
 
 def test_retry_decorator_different_exception_fail() -> None:
@@ -55,20 +55,20 @@ def test_retry_decorator_different_exception_fail() -> None:
     exceptions_to_raise: list[type[BaseException]] = [FileExistsError]
     exceptions_to_catch: tuple[type[BaseException], ...] = (FileNotFoundError,)
 
-    retry_decorator_test_result_type: RetryDecoratorTestResultType = __test_retry_decorator(
+    retry_decorator_test_result_type: RetryDecoratorResultType = __test_retry_decorator(
         exceptions_to_raise=exceptions_to_raise,
         exceptions_to_catch=exceptions_to_catch,
         number_of_retries=1,
     )
 
-    assert(retry_decorator_test_result_type == RetryDecoratorTestResultType.UNSPECIFIED_EXCEPTION)
+    assert(retry_decorator_test_result_type == RetryDecoratorResultType.FAILED_VIA_UNSPECIFIED_EXCEPTION)
 
 
 def __test_retry_decorator(
     exceptions_to_raise: list[type[BaseException]],
     exceptions_to_catch: tuple[type[BaseException], ...],
     number_of_retries: int,
-) -> RetryDecoratorTestResultType:
+) -> RetryDecoratorResultType:
     """
     This is a universal testing function for the `retry` decorator.  Other functions test specific cases by calling this function.
 
@@ -84,8 +84,8 @@ def __test_retry_decorator(
 
     try:
         decorated_function()
-        return RetryDecoratorTestResultType.SUCCESS
+        return RetryDecoratorResultType.SUCCESS
     except exceptions_to_catch:
-        return RetryDecoratorTestResultType.SPECIFIED_EXCEPTION
+        return RetryDecoratorResultType.FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTION
     except Exception:
-        return RetryDecoratorTestResultType.UNSPECIFIED_EXCEPTION
+        return RetryDecoratorResultType.FAILED_VIA_UNSPECIFIED_EXCEPTION
