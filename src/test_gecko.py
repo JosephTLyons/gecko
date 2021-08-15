@@ -43,6 +43,20 @@ def test_retry_decorator_too_many_exceptions_fail() -> None:
     )
 
 
+def test_retry_decorator_different_exception_fail() -> None:
+    # This test covers the case that an exception is raised by the decorated function that is not specified in the `retry` decorator.
+
+    exceptions_to_raise: list[type[BaseException]] = [FileExistsError]
+    exceptions_to_catch: tuple[type[BaseException], ...] = (FileNotFoundError,)
+
+    __test_retry_decorator(
+        exceptions_to_raise=exceptions_to_raise,
+        exceptions_to_catch=exceptions_to_catch,
+        number_of_retries=1,
+        try_should_succeed=False
+    )
+
+
 def __test_retry_decorator(
     exceptions_to_raise: list[type[BaseException]],
     exceptions_to_catch: tuple[type[BaseException], ...],
@@ -57,7 +71,7 @@ def __test_retry_decorator(
         `TypeError: exceptions must be old-style classes or derived from BaseException, not tuple`
     """
 
-    @retry(*exceptions_to_raise, number_of_retries=number_of_retries, duration_between_retries_in_seconds=0.01)
+    @retry(*exceptions_to_catch, number_of_retries=number_of_retries, duration_between_retries_in_seconds=0.01)
     def decorated_function() -> None:
         if exceptions_to_raise:
             raise exceptions_to_raise.pop(0)
@@ -66,4 +80,7 @@ def __test_retry_decorator(
         decorated_function()
         assert(try_should_succeed)
     except exceptions_to_catch:
+        assert(not try_should_succeed)
+    # Reaching this area means we hit an exception that wasn't specified in the `retry` decoratory
+    except Exception:
         assert(not try_should_succeed)
