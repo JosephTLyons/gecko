@@ -10,7 +10,7 @@ Func = TypeVar("Func", bound=Callable[..., Any])
 
 def disable(should_print_details: bool = False) -> Callable[[Func], Func]:
     def decorator(func: Func) -> Func:
-        """This decorator prevents the function it decorates from executing"""
+        """This decorator prevents the function it decorates from executing."""
         @wraps(func)
         def wrapper(*args, **kwargs):  # type: ignore
             if should_print_details:
