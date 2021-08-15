@@ -24,7 +24,7 @@ def test_retry_decorator_fail() -> None:
 
 
 def __test_retry_decorator_base(number_of_exceptions_raised: int, number_of_retries: int, try_should_succeed: bool) -> None:
-    # Used to simimulate a function raising multiple exceptions
+    # Used to simimulate a function raising a limited amount of exceptions
     exceptions: list[type[BaseException]] = [FileNotFoundError] * number_of_exceptions_raised
 
     @retry(FileNotFoundError, number_of_retries=number_of_retries, duration_between_retries_in_seconds=0.01)
