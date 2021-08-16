@@ -8,6 +8,19 @@ from typing import Any, Callable, TypeVar, cast
 Func = TypeVar("Func", bound=Callable[..., Any])
 
 
+def call_count(func: Func) -> Func:
+    """This decorator keeps track of the number of times the function it decorates is called."""
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):  # type: ignore
+        wrapper.call_count += 1  # type: ignore
+        return func(*args, **kwargs)
+
+    wrapper.call_count: int = 0  # type: ignore
+
+    return cast(Func, wrapper)
+
+
 def disable(should_print_details: bool = False) -> Callable[[Func], Func]:
     def decorator(func: Func) -> Func:
         """This decorator prevents the function it decorates from executing."""

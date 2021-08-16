@@ -1,7 +1,22 @@
 from enum import Enum, auto
 
-from src.gecko import disable, retry
+from src.gecko import call_count, disable, retry
 
+# Test `call_count` ================================================================================
+
+def test_call_count_decorator() -> None:
+    @call_count
+    def decorated_function() -> None:
+        pass
+
+    count_count = 3
+
+    for _ in range(count_count):
+        decorated_function()
+
+    assert(decorated_function.call_count == count_count)  # type: ignore
+
+# Test `disable` ===================================================================================
 
 def test_disable_decorator() -> None:
     @disable()
@@ -10,6 +25,7 @@ def test_disable_decorator() -> None:
 
     assert(decorated_function() is None)
 
+# Test `retry` =====================================================================================
 
 class RetryDecoratorResultType(Enum):
     SUCCESS = auto()
