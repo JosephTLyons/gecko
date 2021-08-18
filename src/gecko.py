@@ -1,6 +1,6 @@
 import time
 
-from functools import wraps
+from functools import update_wrapper, wraps
 from typing import Any, Callable, TypeVar, cast
 
 
@@ -11,14 +11,20 @@ Func = TypeVar("Func", bound=Callable[..., Any])
 def call_count(func: Func) -> Func:
     """This decorator keeps track of the number of times the function it decorates is called."""
 
-    @wraps(func)
-    def wrapper(*args, **kwargs):  # type: ignore
-        wrapper.call_count += 1  # type: ignore
-        return func(*args, **kwargs)
+    class CallCounter:
+        def __init__(self, func: Func) -> None:
+            self.call_count: int = 0
+            self.func: Func = func
 
-    wrapper.call_count: int = 0  # type: ignore
+            update_wrapper(self, func)
 
-    return cast(Func, wrapper)
+        def __call__(self, *args, **kwargs) -> None:  # type: ignore
+            self.call_count += 1
+            self.func(*args, **kwargs)
+
+    call_count_object: CallCounter = CallCounter(func)
+
+    return cast(Func, call_count_object)
 
 
 def disable(should_print_details: bool = False) -> Callable[[Func], Func]:
