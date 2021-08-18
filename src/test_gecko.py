@@ -9,7 +9,7 @@ def test_call_count_decorator() -> None:
     def decorated_function() -> None:
         pass
 
-    count_count = 3
+    count_count: int = 3
 
     for _ in range(count_count):
         decorated_function()
