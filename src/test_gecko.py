@@ -14,7 +14,7 @@ def test_call_count_decorator() -> None:
     for _ in range(count_count):
         decorated_function()
 
-    assert(decorated_function.call_count == count_count)  # type: ignore
+    assert decorated_function.call_count == count_count  # type: ignore
 
 # Test `disable` ===================================================================================
 
@@ -23,7 +23,7 @@ def test_disable_decorator() -> None:
     def decorated_function() -> str:
         return "Hello World!"
 
-    assert(decorated_function() is None)
+    assert decorated_function() is None
 
 # Test `retry` =====================================================================================
 
@@ -46,7 +46,7 @@ def test_retry_decorator_pass() -> None:
         number_of_retries=3,
     )
 
-    assert(retry_decorator_test_result_type == RetryDecoratorResultType.SUCCESS)
+    assert retry_decorator_test_result_type == RetryDecoratorResultType.SUCCESS
 
 
 def test_retry_decorator_too_many_exceptions_fail() -> None:
@@ -62,7 +62,7 @@ def test_retry_decorator_too_many_exceptions_fail() -> None:
         number_of_retries=3,
     )
 
-    assert(retry_decorator_test_result_type == RetryDecoratorResultType.FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTIONS)
+    assert retry_decorator_test_result_type == RetryDecoratorResultType.FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTIONS
 
 
 def test_retry_decorator_different_exception_fail() -> None:
@@ -77,7 +77,7 @@ def test_retry_decorator_different_exception_fail() -> None:
         number_of_retries=1,
     )
 
-    assert(retry_decorator_test_result_type == RetryDecoratorResultType.FAILED_VIA_UNSPECIFIED_EXCEPTIONS)
+    assert retry_decorator_test_result_type == RetryDecoratorResultType.FAILED_VIA_UNSPECIFIED_EXCEPTIONS
 
 
 def __test_retry_decorator(
