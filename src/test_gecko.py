@@ -88,7 +88,7 @@ def __test_retry_decorator(
     """
     This is a universal testing function for the `retry` decorator.  Other functions test specific cases by calling this function.
 
-    exceptions_to_raise -- Used to simimulate a function raising a limited amount of exceptions.  This must be a list so we can pop off raised exceptions
+    exceptions_to_raise -- Used to simulate a function raising a limited amount of exceptions.  This must be a list so we can pop off raised exceptions
     exceptions_to_catch -- Used to define what the try-except should catch.  This must be a tuple to avoid the following error:
         `TypeError: exceptions must be old-style classes or derived from BaseException, not tuple`
     """
