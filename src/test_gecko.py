@@ -1,6 +1,6 @@
 from enum import Enum, auto
 
-from src.gecko import call_count, disable, retry
+from src.gecko import call_count, call_history, disable, retry
 from ward import test
 
 # Test `call_count` ================================================================================
@@ -17,6 +17,31 @@ def _() -> None:
         decorated_function()
 
     assert decorated_function.call_count == count_count  # type: ignore
+
+# Test `call_history` ==============================================================================
+
+# We will want better testing for this decorator.  The only test here has many asserts and tests a bunch of variations at once
+# This should be split up into multiple tests at some point
+
+@test("Test the call_history decorator")
+def _() -> None:
+    @call_history(history_length=1)
+    def decorated_function(num: int, text: str, dog: int = 1, cat: float = 0.1) -> None:
+        pass
+
+    args = 1, "hi"
+    kwargs = {"dog": 2, "cat": 3.14}
+
+    decorated_function(*args, **kwargs)
+    decorated_function(*args, **kwargs)
+
+    assert len(decorated_function.call_history) == 1
+
+    call_history_entry = decorated_function.call_history[0]
+
+    assert call_history_entry.args == args
+    assert call_history_entry.kwargs == kwargs
+    assert str(call_history_entry) == "decorated_function(1, \"hi\", dog=2, cat=3.14)"
 
 # Test `disable` ===================================================================================
 

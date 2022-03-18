@@ -3,6 +3,8 @@ import time
 from functools import wraps
 from typing import Any, Callable, TypeVar, cast
 
+from src.call_history import CallHistoryEntry
+
 
 # https://mypy.readthedocs.io/en/stable/generics.html#declaring-decorators
 Func = TypeVar("Func", bound=Callable[..., Any])
@@ -19,6 +21,27 @@ def call_count(func: Func) -> Func:
     wrapper.call_count: int = 0  # type: ignore
 
     return cast(Func, wrapper)
+
+
+def call_history(history_length=None) -> Callable[[Func], Func]:
+    def decorator(func: Func) -> Func:
+        """This decorator keeps track of the call history of the function it decorates."""
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):  # type: ignore
+            call_history_entry = CallHistoryEntry(func.__code__.co_name, *args, **kwargs)
+            wrapper.call_history.insert(0, call_history_entry)
+
+            if history_length and len(wrapper.call_history) > history_length:
+                wrapper.call_history.pop(-1)
+
+            return func(*args, **kwargs)
+
+        wrapper.call_history: list[CallHistory] = []  # type: ignore
+
+        return cast(Func, wrapper)
+
+    return decorator
 
 
 def disable(should_print_details: bool = False) -> Callable[[Func], Func]:
