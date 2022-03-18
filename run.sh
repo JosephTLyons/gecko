@@ -1,3 +1,3 @@
-black .
+./black
 ward
 ./mypy.sh
