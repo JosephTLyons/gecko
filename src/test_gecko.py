@@ -3,6 +3,8 @@ from enum import Enum, auto
 from src.gecko import call_count, call_history, disable, retry
 from ward import test
 
+# NOTE: May not need to keep tests separated into test_ file now that we are using Ward - investigate
+
 # Test `call_count` ================================================================================
 
 @test("Test the call_count decorator")
