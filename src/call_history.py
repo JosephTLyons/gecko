@@ -16,5 +16,5 @@ class CallHistoryEntry:
 
         return f"{self.function_name}({final_input_string})"
 
-# Curretly, this class gets tests indirectly through the tests ran for the call_history decorator
+# Curretly, this class gets tested indirectly through the tests ran for the call_history decorator
 # We might want to add some tests that run directly on this class
