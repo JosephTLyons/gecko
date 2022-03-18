@@ -1,10 +1,12 @@
 from enum import Enum, auto
 
 from src.gecko import call_count, disable, retry
+from ward import test
 
 # Test `call_count` ================================================================================
 
-def test_call_count_decorator() -> None:
+@test("Test the call_count decorator")
+def _() -> None:
     @call_count
     def decorated_function() -> None:
         pass
@@ -18,7 +20,8 @@ def test_call_count_decorator() -> None:
 
 # Test `disable` ===================================================================================
 
-def test_disable_decorator() -> None:
+@test("Test the disable decorator")
+def _() -> None:
     @disable()
     def decorated_function() -> str:
         return "Hello World!"
@@ -32,8 +35,8 @@ class RetryDecoratorResultType(Enum):
     FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTIONS = auto()
     FAILED_VIA_UNSPECIFIED_EXCEPTIONS = auto()
 
-
-def test_retry_decorator_pass() -> None:
+@test("Test the retry decorator - passing case")
+def _() -> None:
     # This test covers the case of the decorated function raising less exceptions than the retry decorator is defined to catch.
     # It should be noted that the decorated function is raising exceptions that the decorator is defined to retry on.
 
@@ -49,7 +52,8 @@ def test_retry_decorator_pass() -> None:
     assert retry_decorator_test_result_type == RetryDecoratorResultType.SUCCESS
 
 
-def test_retry_decorator_too_many_exceptions_fail() -> None:
+@test("Test the retry decorator - too many exceptions fail case")
+def _() -> None:
     # This test covers the case of the decorated function raising more exceptions than the retry decorator is defined to catch.
     # It should be noted that the decorated function is raising exceptions that the decorator is definied to retry on
 
@@ -65,7 +69,8 @@ def test_retry_decorator_too_many_exceptions_fail() -> None:
     assert retry_decorator_test_result_type == RetryDecoratorResultType.FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTIONS
 
 
-def test_retry_decorator_different_exception_fail() -> None:
+@test("Test the retry decorator - different exception fail case")
+def _() -> None:
     # This test covers the case of an exception being raised by the decorated function that is not specified in the `retry` decorator.
 
     exceptions_to_raise: list[type[BaseException]] = [FileExistsError]
