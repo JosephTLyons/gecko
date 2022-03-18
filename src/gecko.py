@@ -44,13 +44,15 @@ def call_history(history_length: int | None = None) -> Callable[[Func], Func]:
     return decorator
 
 
-def disable(should_print_details: bool = False) -> Callable[[Func], Func]:
+def disable(should_print_details: bool = False, return_value: Any | None = None) -> Callable[[Func], Func]:
     def decorator(func: Func) -> Func:
         """This decorator prevents the function it decorates from executing."""
         @wraps(func)
         def wrapper(*args, **kwargs):  # type: ignore
             if should_print_details:
                 print(f"{func.__name__} is disabled")
+
+            return return_value
 
         return cast(Func, wrapper)
 

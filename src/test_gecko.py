@@ -47,13 +47,22 @@ def _() -> None:
 
 # Test `disable` ===================================================================================
 
-@test("Test the disable decorator")
+@test("Test the disable decorator - with a None return value")
 def _() -> None:
     @disable()
     def decorated_function() -> str:
         return "Hello World!"
 
     assert decorated_function() is None
+
+
+@test("Test the disable decorator - with a user-specified return value")
+def _() -> None:
+    @disable(return_value=0)
+    def decorated_function(number_1: int, number_2: int) -> int:
+        return number_1 + number_2
+
+    assert decorated_function(1, 2) == 0
 
 # Test `retry` =====================================================================================
 
