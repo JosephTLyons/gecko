@@ -23,13 +23,13 @@ def call_count(func: Func) -> Func:
     return cast(Func, wrapper)
 
 
-def call_history(history_length=None) -> Callable[[Func], Func]:
+def call_history(history_length: int | None = None) -> Callable[[Func], Func]:
     def decorator(func: Func) -> Func:
         """This decorator keeps track of the call history of the function it decorates."""
 
         @wraps(func)
         def wrapper(*args, **kwargs):  # type: ignore
-            call_history_entry = CallHistoryEntry(func, *args, **kwargs)
+            call_history_entry: CallHistoryEntry = CallHistoryEntry(func, *args, **kwargs)
             wrapper.call_history.insert(0, call_history_entry)
 
             if history_length and len(wrapper.call_history) > history_length:

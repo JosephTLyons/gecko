@@ -1,20 +1,20 @@
 class CallHistoryEntry:
-    def __init__(self, function_object, *args, **kwargs):
+    def __init__(self, function_object, *args, **kwargs):  # type: ignore
         self.function_object = function_object
         self.args = args
         self.kwargs = kwargs
 
-    def __str__(self):
-        function_name = self.function_object.__code__.co_name
+    def __str__(self) -> str:
+        function_name: str = self.function_object.__code__.co_name
 
         args = [f"\"{arg}\"" if isinstance(arg, str) else arg for arg in self.args]
         kwargs = {key: f"\"{value}\"" if isinstance(value, str) else value for key, value in self.kwargs.items()}
 
-        arg_string = ", ".join(str(arg) for arg in args)
-        kwarg_string = ", ".join(f"{key}={value}" for key, value in kwargs.items())
+        arg_string: str = ", ".join(str(arg) for arg in args)
+        kwarg_string: str = ", ".join(f"{key}={value}" for key, value in kwargs.items())
 
-        final_input_list = [arg_string, kwarg_string]
-        final_input_string = ", ".join(final_input_list)
+        final_input_list: list[str] = [arg_string, kwarg_string]
+        final_input_string: str = ", ".join(final_input_list)
 
         return f"{function_name}({final_input_string})"
 
