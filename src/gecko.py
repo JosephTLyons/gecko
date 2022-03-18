@@ -29,7 +29,7 @@ def call_history(history_length=None) -> Callable[[Func], Func]:
 
         @wraps(func)
         def wrapper(*args, **kwargs):  # type: ignore
-            call_history_entry = CallHistoryEntry(func.__code__.co_name, *args, **kwargs)
+            call_history_entry = CallHistoryEntry(func, *args, **kwargs)
             wrapper.call_history.insert(0, call_history_entry)
 
             if history_length and len(wrapper.call_history) > history_length:

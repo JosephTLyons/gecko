@@ -1,6 +1,6 @@
 class CallHistoryEntry:
-    def __init__(self, function_name, *args, **kwargs):
-        self.function_name = function_name
+    def __init__(self, function_object, *args, **kwargs):
+        self.function_name = function_object.__code__.co_name
         self.args = args
         self.kwargs = kwargs
 
