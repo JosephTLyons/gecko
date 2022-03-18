@@ -1,0 +1,3 @@
+black .
+ward
+./mypy.sh
