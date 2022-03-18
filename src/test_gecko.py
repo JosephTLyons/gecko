@@ -7,6 +7,7 @@ from ward import test
 
 # Test `call_count` ================================================================================
 
+
 @test("Test call_count decorator")
 def _() -> None:
     @call_count
@@ -20,10 +21,12 @@ def _() -> None:
 
     assert decorated_function.call_count == count_count  # type: ignore
 
+
 # Test `call_history` ==============================================================================
 
 # We will want better testing for this decorator.  The only test here has many asserts and tests a bunch of variations at once
 # This should be split up into multiple tests at some point
+
 
 @test("Test call_history decorator")
 def _() -> None:
@@ -43,9 +46,11 @@ def _() -> None:
 
     assert call_history_entry.args == args
     assert call_history_entry.kwargs == kwargs
-    assert str(call_history_entry) == "decorated_function(1, \"hi\", dog=2, cat=3.14)"
+    assert str(call_history_entry) == 'decorated_function(1, "hi", dog=2, cat=3.14)'
+
 
 # Test `disable` ===================================================================================
+
 
 @test("Test disable decorator - with a `None` return value")
 def _() -> None:
@@ -64,12 +69,15 @@ def _() -> None:
 
     assert decorated_function(1, 2) == 0
 
+
 # Test `retry` =====================================================================================
+
 
 class RetryDecoratorResultType(Enum):
     SUCCESS = auto()
     FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTIONS = auto()
     FAILED_VIA_UNSPECIFIED_EXCEPTIONS = auto()
+
 
 @test("Test retry decorator - passing case")
 def _() -> None:
@@ -102,7 +110,10 @@ def _() -> None:
         number_of_retries=3,
     )
 
-    assert retry_decorator_test_result_type == RetryDecoratorResultType.FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTIONS
+    assert (
+        retry_decorator_test_result_type
+        == RetryDecoratorResultType.FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTIONS
+    )
 
 
 @test("Test retry decorator - different exception fail case")
@@ -118,7 +129,10 @@ def _() -> None:
         number_of_retries=1,
     )
 
-    assert retry_decorator_test_result_type == RetryDecoratorResultType.FAILED_VIA_UNSPECIFIED_EXCEPTIONS
+    assert (
+        retry_decorator_test_result_type
+        == RetryDecoratorResultType.FAILED_VIA_UNSPECIFIED_EXCEPTIONS
+    )
 
 
 def __test_retry_decorator(
@@ -134,7 +148,11 @@ def __test_retry_decorator(
         `TypeError: exceptions must be old-style classes or derived from BaseException, not tuple`
     """
 
-    @retry(*exceptions_to_catch, number_of_retries=number_of_retries, duration_between_retries_in_seconds=0.01)
+    @retry(
+        *exceptions_to_catch,
+        number_of_retries=number_of_retries,
+        duration_between_retries_in_seconds=0.01
+    )
     def decorated_function() -> None:
         if exceptions_to_raise:
             raise exceptions_to_raise.pop(0)
@@ -143,6 +161,8 @@ def __test_retry_decorator(
         decorated_function()
         return RetryDecoratorResultType.SUCCESS
     except exceptions_to_catch:
-        return RetryDecoratorResultType.FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTIONS
+        return (
+            RetryDecoratorResultType.FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTIONS
+        )
     except Exception:
         return RetryDecoratorResultType.FAILED_VIA_UNSPECIFIED_EXCEPTIONS

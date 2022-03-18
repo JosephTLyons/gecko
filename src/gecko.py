@@ -29,7 +29,9 @@ def call_history(history_length: int | None = None) -> Callable[[Func], Func]:
 
         @wraps(func)
         def wrapper(*args, **kwargs):  # type: ignore
-            call_history_entry: CallHistoryEntry = CallHistoryEntry(func, *args, **kwargs)
+            call_history_entry: CallHistoryEntry = CallHistoryEntry(
+                func, *args, **kwargs
+            )
             wrapper.call_history.insert(0, call_history_entry)
 
             if history_length and len(wrapper.call_history) > history_length:
@@ -44,9 +46,12 @@ def call_history(history_length: int | None = None) -> Callable[[Func], Func]:
     return decorator
 
 
-def disable(should_print_details: bool = False, return_value: Any | None = None) -> Callable[[Func], Func]:
+def disable(
+    should_print_details: bool = False, return_value: Any | None = None
+) -> Callable[[Func], Func]:
     def decorator(func: Func) -> Func:
         """This decorator prevents the function it decorates from executing."""
+
         @wraps(func)
         def wrapper(*args, **kwargs):  # type: ignore
             if should_print_details:
@@ -63,13 +68,14 @@ def retry(
     *exceptions: type[BaseException],
     number_of_retries: int = 3,
     duration_between_retries_in_seconds: float = 1.0,
-    should_print_details: bool = False
+    should_print_details: bool = False,
 ) -> Callable[[Func], Func]:
     """
     This decorator re-calls the function it decorates when the function raises any of the `Exception` supplied to it via `*exceptions`.
     It should be noted that the function is called once before any retries are attempted.  Because of this,
     the maximum number of times the function can be called is `number_of_retries` + 1.
     """
+
     def decorator(func: Func) -> Func:
         @wraps(func)
         def wrapper(*args, **kwargs):  # type: ignore
