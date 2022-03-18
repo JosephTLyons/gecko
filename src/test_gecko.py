@@ -6,7 +6,7 @@ from ward import raises, test
 # Test `call_count` ================================================================================
 
 
-@test("Test call_count decorator")
+@test("Test `call_count` decorator", tags=["call_count"])
 def _() -> None:
     @call_count
     def decorated_function() -> None:
@@ -26,7 +26,7 @@ def _() -> None:
 # This should be split up into multiple tests at some point
 
 
-@test("Test call_history decorator")
+@test("Test `call_history` decorator", tags=["call_history"])
 def _() -> None:
     @call_history(history_length=1)
     def decorated_function(num: int, text: str, dog: int = 1, cat: float = 0.1) -> None:
@@ -50,7 +50,7 @@ def _() -> None:
 # Test `disable` ===================================================================================
 
 
-@test("Test disable decorator - with a `None` return value")
+@test("Test `disable` decorator - with a `None` return value", tags=["disable"])
 def _() -> None:
     @disable()
     def decorated_function() -> str:
@@ -59,7 +59,7 @@ def _() -> None:
     assert decorated_function() is None
 
 
-@test("Test disable decorator - with a user-specified return value")
+@test("Test `disable` decorator - with a user-specified return value", tags=["disable"])
 def _() -> None:
     @disable(return_value=0)
     def decorated_function(number_1: int, number_2: int) -> int:
