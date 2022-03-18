@@ -99,5 +99,5 @@ def retry(
 
 # TODO:
 # Fix mypy errors
-# add TODO / Implement decorator | Implement(notes: ) -> raises TODO exception with notes
+# Add TODO / Implement decorator | Implement(notes: str) -> raises TODO exception with notes
 # Name: MUD?
