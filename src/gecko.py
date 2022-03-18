@@ -70,8 +70,8 @@ def retry(
 ) -> Callable[[Func], Func]:
     """
     This decorator re-calls the function it decorates when the function raises any of the `Exception` supplied to it via `*exceptions`.
-    It should be noted that the function is called once before any retries are attempted.  Because of this,
-    the maximum number of times the function can be called is `number_of_retries` + 1.
+    It should be noted that the function is called once before any retries are attempted.  Because of this, the function is called
+    `number_of_retries` + 1 times.
     """
 
     def decorator(func: Func) -> Func:
