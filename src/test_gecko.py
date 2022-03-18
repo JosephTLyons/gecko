@@ -7,7 +7,7 @@ from ward import test
 
 # Test `call_count` ================================================================================
 
-@test("Test the call_count decorator")
+@test("Test call_count decorator")
 def _() -> None:
     @call_count
     def decorated_function() -> None:
@@ -25,7 +25,7 @@ def _() -> None:
 # We will want better testing for this decorator.  The only test here has many asserts and tests a bunch of variations at once
 # This should be split up into multiple tests at some point
 
-@test("Test the call_history decorator")
+@test("Test call_history decorator")
 def _() -> None:
     @call_history(history_length=1)
     def decorated_function(num: int, text: str, dog: int = 1, cat: float = 0.1) -> None:
@@ -47,7 +47,7 @@ def _() -> None:
 
 # Test `disable` ===================================================================================
 
-@test("Test the disable decorator - with a None return value")
+@test("Test disable decorator - with a `None` return value")
 def _() -> None:
     @disable()
     def decorated_function() -> str:
@@ -56,7 +56,7 @@ def _() -> None:
     assert decorated_function() is None
 
 
-@test("Test the disable decorator - with a user-specified return value")
+@test("Test disable decorator - with a user-specified return value")
 def _() -> None:
     @disable(return_value=0)
     def decorated_function(number_1: int, number_2: int) -> int:
@@ -71,7 +71,7 @@ class RetryDecoratorResultType(Enum):
     FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTIONS = auto()
     FAILED_VIA_UNSPECIFIED_EXCEPTIONS = auto()
 
-@test("Test the retry decorator - passing case")
+@test("Test retry decorator - passing case")
 def _() -> None:
     # This test covers the case of the decorated function raising less exceptions than the retry decorator is defined to catch.
     # It should be noted that the decorated function is raising exceptions that the decorator is defined to retry on.
@@ -88,7 +88,7 @@ def _() -> None:
     assert retry_decorator_test_result_type == RetryDecoratorResultType.SUCCESS
 
 
-@test("Test the retry decorator - too many exceptions fail case")
+@test("Test retry decorator - too many exceptions fail case")
 def _() -> None:
     # This test covers the case of the decorated function raising more exceptions than the retry decorator is defined to catch.
     # It should be noted that the decorated function is raising exceptions that the decorator is definied to retry on
@@ -105,7 +105,7 @@ def _() -> None:
     assert retry_decorator_test_result_type == RetryDecoratorResultType.FAILED_VIA_EXHAUSTING_RETRIES_ON_SPECIFIED_EXCEPTIONS
 
 
-@test("Test the retry decorator - different exception fail case")
+@test("Test retry decorator - different exception fail case")
 def _() -> None:
     # This test covers the case of an exception being raised by the decorated function that is not specified in the `retry` decorator.
 
