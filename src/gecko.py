@@ -45,7 +45,7 @@ def call_history(history_length: int | None = None) -> Callable[[Func], Func]:
 
 
 def disable(
-    should_print_details: bool = False, return_value: Any | None = None
+    should_print_details: bool = False, return_value: Any = None
 ) -> Callable[[Func], Func]:
     def decorator(func: Func) -> Func:
         """This decorator prevents the function it decorates from executing."""
