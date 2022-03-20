@@ -5,7 +5,7 @@ class CallHistoryEntry:
         self.kwargs = kwargs
 
     def __str__(self) -> str:
-        function_name: str = self.function_object.__code__.co_name
+        function_name: str = self.function_object.__name__
 
         args = [f'"{arg}"' if isinstance(arg, str) else arg for arg in self.args]
         kwargs = {
