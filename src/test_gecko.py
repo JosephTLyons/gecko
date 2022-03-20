@@ -26,25 +26,28 @@ def _() -> None:
 # This should be split up into multiple tests at some point
 
 
-@test("Test `call_history` decorator", tags=["call_history"])
+@test("Test `call_history` decorator - no history purge", tags=["call_history"])
 def _() -> None:
-    @call_history(history_length=1)
-    def decorated_function(num: int, text: str, dog: int = 1, cat: float = 0.1) -> None:
+    @call_history(history_length=2)
+    def decorated_function() -> None:
         pass
 
-    args = 1, "hi"
-    kwargs = {"dog": 2, "cat": 3.14}
+    decorated_function()
+    decorated_function()
 
-    decorated_function(*args, **kwargs)
-    decorated_function(*args, **kwargs)
+    assert len(decorated_function.call_history) == 2
+
+
+@test("Test `call_history` decorator - history purge", tags=["call_history"])
+def _() -> None:
+    @call_history(history_length=1)
+    def decorated_function() -> None:
+        pass
+
+    decorated_function()
+    decorated_function()
 
     assert len(decorated_function.call_history) == 1
-
-    call_history_entry = decorated_function.call_history[0]
-
-    assert call_history_entry.args == args
-    assert call_history_entry.kwargs == kwargs
-    assert str(call_history_entry) == 'decorated_function(1, "hi", dog=2, cat=3.14)'
 
 
 # Test `disable` ===================================================================================

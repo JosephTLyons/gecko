@@ -13,14 +13,18 @@ class CallHistoryEntry:
             for key, value in self.kwargs.items()
         }
 
+        final_input_list: list[str] = []
+
         arg_string: str = ", ".join(str(arg) for arg in args)
+
+        if arg_string:
+            final_input_list.append(arg_string)
+
         kwarg_string: str = ", ".join(f"{key}={value}" for key, value in kwargs.items())
 
-        final_input_list: list[str] = [arg_string, kwarg_string]
+        if kwarg_string:
+            final_input_list.append(kwarg_string)
+
         final_input_string: str = ", ".join(final_input_list)
 
         return f"{function_name}({final_input_string})"
-
-
-# Curretly, this class gets tested indirectly through the tests ran for the call_history decorator
-# We might want to add some tests that run directly on this class
