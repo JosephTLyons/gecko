@@ -22,9 +22,6 @@ def _() -> None:
 
 # Test `call_history` ==============================================================================
 
-# We will want better testing for this decorator.  The only test here has many asserts and tests a bunch of variations at once
-# This should be split up into multiple tests at some point
-
 
 @test("Test `call_history` decorator - no history purge", tags=["call_history"])
 def _() -> None:
