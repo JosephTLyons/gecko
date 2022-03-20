@@ -20,7 +20,7 @@ for function_object, args, kwargs, call_string in (
     ),
 ):
 
-    @test("Test `CallHistoryEntry`", tags=["call_count"])
+    @test("Test `CallHistoryEntry`", tags=["call_history_entry"])
     def _(
         function_object=function_object,
         args=args,
